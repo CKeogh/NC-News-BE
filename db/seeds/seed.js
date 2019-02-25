@@ -13,6 +13,6 @@ exports.seed = (connection, Promise) => connection.migrate.rollback()
   })
   .then(([topicRef, insertedUsers]) => {
     const userRef = createRefTable(insertedUsers, 'username', 'user_id');
-    // const reformattedArticles =
+    // const formattedArticles =
     const insertedArticles = connection('articles').insert(articleData);
   });
