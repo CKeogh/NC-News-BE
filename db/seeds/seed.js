@@ -1,7 +1,7 @@
 const {
   articleData, commentData, topicData, userData,
 } = require('../data');
-const { createRefTable } = require('../utils/seedFunctions.js');
+const { createRefTable, formatArticles, formatComments } = require('../utils/seedFunctions.js');
 
 exports.seed = (connection, Promise) => connection.migrate.rollback()
   .then(() => connection.migrate.latest())
@@ -13,6 +13,11 @@ exports.seed = (connection, Promise) => connection.migrate.rollback()
   })
   .then(([topicRef, insertedUsers]) => {
     const userRef = createRefTable(insertedUsers, 'username', 'user_id');
-    // const formattedArticles =
-    const insertedArticles = connection('articles').insert(articleData);
+    const formattedArticles = formatArticles(articleData, topicRef, userRef);
+    const insertedArticles = connection('articles').insert(formattedArticles).returning('*');
+    return Promise.all([userRef, insertedArticles]);
+  })
+  .then(([userRef, insertedArticles]) => {
+    const articleRef = createRefTable(insertedArticles, 'title', 'article_id');
+    const formattedComments = formatComments(commentData, userRef, articleRef);
   });
