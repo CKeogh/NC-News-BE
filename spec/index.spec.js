@@ -1,6 +1,9 @@
 const { expect } = require('chai');
 const {
-  createRefTable, formatArticles, convertDate, formatComments,
+  createRefTable,
+  formatArticles,
+  convertDate,
+  formatComments,
 } = require('../db/utils/seedFunctions');
 
 describe('createRefTable', () => {
@@ -69,25 +72,6 @@ describe('formatArticles', () => {
         votes: 0,
       },
     ];
-    const expected = [
-      {
-        article_id: 1,
-        title: 'a',
-        topic_id: 5,
-        user_id: 9,
-        body: 'xxx',
-        votes: 0,
-      },
-      {
-        article_id: 2,
-        title: 'e',
-        topic_id: 3,
-        user_id: 11,
-        body: 'yyy',
-        votes: 0,
-      },
-    ];
-
     const formattedArticles = formatArticles(input, { b: 5, f: 3 }, { c: 9, g: 11 });
     expect(formattedArticles[0].topic_id).to.equal(5);
     expect(formattedArticles[1].topic_id).to.equal(3);

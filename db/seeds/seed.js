@@ -22,4 +22,4 @@ exports.seed = (connection, Promise) => connection.migrate.rollback()
     const formattedComments = formatComments(commentData, userRef, articleRef);
     return connection('comments').insert(formattedComments).returning('*');
   })
-  .then(comments => console.log('Database Seeded!'));
+  .then(() => console.log('Database Seeded!'));

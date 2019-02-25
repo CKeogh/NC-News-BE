@@ -25,5 +25,8 @@ const formatComments = (comments, userRef, articleRef) => comments.map(comment =
 
 
 module.exports = {
-  createRefTable, formatArticles, convertDate, formatComments,
+  createRefTable,
+  formatArticles,
+  convertDate,
+  formatComments,
 };
