@@ -10,6 +10,6 @@ const request = supertest(app);
 describe('/api', () => {
   after(() => connection.destroy());
   describe('/topics', () => {
-    it('GET: return status code 200', () => request.get('/api/topics').expect(200));
+    it('GET: return status code 200', () => request.get('/api/articles').expect(200));
   });
 });
