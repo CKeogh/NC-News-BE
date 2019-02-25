@@ -1,7 +1,7 @@
 const {
   articleData, commentData, topicData, userData,
 } = require('../data');
-const { createRefTable } = require('../utils/createRefTable.js');
+const { createRefTable } = require('../utils/seedFunctions.js/index.js');
 
 exports.seed = (connection, Promise) => connection.migrate.rollback()
   .then(() => connection.migrate.latest())
@@ -13,5 +13,6 @@ exports.seed = (connection, Promise) => connection.migrate.rollback()
   })
   .then(([topicRef, insertedUsers]) => {
     const userRef = createRefTable(insertedUsers, 'username', 'user_id');
+    // const reformattedArticles =
     const insertedArticles = connection('articles').insert(articleData);
   });
