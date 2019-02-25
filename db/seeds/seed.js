@@ -1,7 +1,7 @@
 const {
   articleData, commentData, topicData, userData,
 } = require('../data');
-const { createRefTable } = require('../utils/seedFunctions.js/index.js');
+const { createRefTable } = require('../utils/seedFunctions.js');
 
 exports.seed = (connection, Promise) => connection.migrate.rollback()
   .then(() => connection.migrate.latest())

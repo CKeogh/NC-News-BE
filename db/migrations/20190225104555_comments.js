@@ -6,7 +6,7 @@ exports.up = function (knex, Promise) {
       .inTable('users');
     commentsTable.integer('belongs_to').references('article_id')
       .inTable('articles');
-    commentsTable.integer('votes');
+    commentsTable.integer('votes').defaultTo(0);
     commentsTable.date('created_at');
     commentsTable.string('body', 500);
   });
