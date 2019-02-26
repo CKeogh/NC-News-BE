@@ -37,7 +37,18 @@ describe.only('/api', () => {
 
     describe('/:article_id', () => {
       it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1').expect(200));
-      it('PATCH: return status code 201 and update article', () => request.patch('/api/articles/1').expect(201));
+      xit('PATCH: return status code 201 and update article', () => request.patch('/api/articles/1').expect(201)
+        .then(({ body }) => {
+          expect(body.article).to.eql({
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: 1542284514171,
+            votes: 100,
+          });
+        }));
     });
   });
 });
