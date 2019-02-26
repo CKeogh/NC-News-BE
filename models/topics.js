@@ -5,6 +5,4 @@ exports.getTopics = () => connection('topics')
 
 exports.addTopic = newTopic => connection('topics')
   .insert(newTopic)
-  .returning('*')
-  .then((topic) => {
-  });
+  .returning('*');

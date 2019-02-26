@@ -18,9 +18,12 @@ describe.only('/api', () => {
       }));
     it('POST: add topic and return status code 201', () => {
       const reqBody = { slug: 'a', description: 'xxx' };
-      return request.post('/api/topics').expect(201)
+      return request.post('/api/topics')
         .send(reqBody)
+        .expect(201)
         .then(({ body }) => {
+          expect(body.topic.slug).to.equal('a');
+          expect(body.topic.topic_id).to.be.a('number');
         });
     });
   });
@@ -34,6 +37,7 @@ describe.only('/api', () => {
 
     describe('/:article_id', () => {
       it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1').expect(200));
+      it('PATCH: return status code 201 and update article', () => request.patch('/api/articles/1').expect(201));
     });
   });
 });

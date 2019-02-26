@@ -14,3 +14,7 @@ exports.receiveArticles = (req, res, next) => {
 exports.sendArticleById = (req, res, next) => {
   res.status(200).send({ article: { OK: true } });
 };
+
+exports.receiveArticleById = (req, res, next) => {
+  res.status(201).send({ mg: 'OK' });
+};
