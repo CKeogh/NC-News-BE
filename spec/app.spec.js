@@ -30,7 +30,7 @@ describe.only('/api', () => {
   describe('/articles', () => {
     it('GET: return status code 200 and array of articles', () => request.get('/api/articles').expect(200)
       .then(({ body }) => {
-        expect(body.articles[0]).to.have.keys('title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_id');
+        expect(body.articles[0]).to.have.keys('title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_id', 'comment_count');
       }));
 
     it('POST: return status code 201 and added article', () => {
@@ -44,7 +44,6 @@ describe.only('/api', () => {
         .send(article)
         .expect(201)
         .then(({ body }) => {
-          console.log(body.article);
           expect(body.article).to.be.an('object');
           expect(body.article).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at');
         });
