@@ -32,6 +32,16 @@ describe.only('/api', () => {
       .then(({ body }) => {
         expect(body.articles[0]).to.have.keys('title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_id', 'comment_count');
       }));
+    it('GET: should filter by username query', () => request.get('/api/articles?username=rogersop')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles[0].author).to.equal('rogersop');
+      }));
+    it('GET: should filter by topic query', () => request.get('/api/articles?topic=cats')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles[0].topic).to.equal('cats');
+      }));
 
     it('POST: return status code 201 and added article', () => {
       const article = {
