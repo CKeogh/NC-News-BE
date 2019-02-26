@@ -7,7 +7,7 @@ exports.sendArticles = (req, res, next) => {
     });
 };
 
-exports.receiveArticles = (req, res, next) => {
+exports.receiveArticle = (req, res, next) => {
   const newArticle = req.body;
   addArticle(newArticle)
     .then((article) => {

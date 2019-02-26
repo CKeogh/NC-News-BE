@@ -5,4 +5,5 @@ exports.getArticles = () => connection('articles').select('*');
 
 exports.addArticle = newArticle => connection('articles')
   .insert(newArticle)
-  .returning('*');
+  .returning('*')
+  .then(article => article[0]);
