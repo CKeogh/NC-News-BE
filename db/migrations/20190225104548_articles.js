@@ -5,9 +5,9 @@ exports.up = function (knex, Promise) {
     articlesTable.string('title').notNullable();
     articlesTable.string('body', 2000);
     articlesTable.integer('votes').defaultTo(0);
-    articlesTable.integer('topic_id').references('topic_id')
+    articlesTable.string('topic').references('slug')
       .inTable('topics');
-    articlesTable.integer('user_id').references('user_id')
+    articlesTable.string('author').references('username')
       .inTable('users');
     articlesTable.date('created_at');
   });

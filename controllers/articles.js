@@ -1,4 +1,4 @@
-const { getArticles } = require('../models/articles');
+const { getArticles, addArticle } = require('../models/articles');
 
 exports.sendArticles = (req, res, next) => {
   getArticles()
@@ -8,7 +8,11 @@ exports.sendArticles = (req, res, next) => {
 };
 
 exports.receiveArticles = (req, res, next) => {
-  res.status(201).send({ OK: true });
+  const newArticle = req.body;
+  addArticle(newArticle)
+    .then((article) => {
+      res.status(201).send({ article });
+    });
 };
 
 exports.sendArticleById = (req, res, next) => {

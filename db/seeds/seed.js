@@ -6,14 +6,13 @@ const { createRefTable, formatArticles, formatComments } = require('../utils/see
 exports.seed = (connection, Promise) => connection.migrate.rollback()
   .then(() => connection.migrate.latest())
   .then(() => connection('topics').insert(topicData).returning('*'))
-  .then((topics) => {
-    const topicRef = createRefTable(topics, 'slug', 'topic_id');
+  .then(() => {
     const insertedUsers = connection('users').insert(userData).returning('*');
-    return Promise.all([topicRef, insertedUsers]);
+    return insertedUsers;
   })
-  .then(([topicRef, insertedUsers]) => {
-    const userRef = createRefTable(insertedUsers, 'username', 'user_id');
-    const formattedArticles = formatArticles(articleData, topicRef, userRef);
+  .then((insertedUsers) => {
+    const userRef = createRefTable(insertedUsers, 'username', 'author');
+    const formattedArticles = formatArticles(articleData);
     const insertedArticles = connection('articles').insert(formattedArticles).returning('*');
     return Promise.all([userRef, insertedArticles]);
   })

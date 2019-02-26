@@ -33,8 +33,22 @@ describe.only('/api', () => {
       .then(({ body }) => {
         expect(body.articles[0]).to.have.keys('title', 'topic_id', 'user_id', 'body', 'created_at', 'votes', 'article_id');
       }));
-    it('POST: return status code 201', () => request.post('/api/articles').expect(201));
 
+    it('POST: return status code 201 and added article', () => {
+      const article = {
+        title: 'a',
+        body: 'xxx',
+        topic: 'cats',
+        username: 'rogersop',
+      };
+      return request.post('/api/articles')
+        .send(article)
+        .expect(201)
+        .then(({ body }) => {
+          console.log(body.article);
+          expect(body.article).to.be.an('object');
+        });
+    });
     describe('/:article_id', () => {
       it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1').expect(200));
       xit('PATCH: return status code 201 and update article', () => request.patch('/api/articles/1').expect(201)
