@@ -1,11 +1,8 @@
 const topicsRouter = require('express').Router();
+const { sendTopics, receiveTopic } = require('../controllers/topics');
 
 topicsRouter.route('/')
-  .get((req, res, next) => {
-    res.status(200).send({ msg: 'all Good' });
-  })
-  .post((req, res, next) => {
-
-  });
+  .get(sendTopics)
+  .post(receiveTopic);
 
 module.exports = topicsRouter;

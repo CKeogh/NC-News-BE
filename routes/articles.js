@@ -1,11 +1,15 @@
 const articlesRouter = require('express').Router();
+const {
+  sendArticles,
+  receiveArticles,
+  sendArticleById,
+} = require('../controllers/articles');
 
 articlesRouter.route('/')
-  .get((req, res, next) => {
-    res.status(200).send({ msg: 'all Good' });
-  })
-  .post((req, res, next) => {
-    res.status(200).send({ msg: 'all good' });
-  });
+  .get(sendArticles)
+  .post(receiveArticles);
+
+articlesRouter.route('/:article_id')
+  .get(sendArticleById);
 
 module.exports = articlesRouter;
