@@ -31,6 +31,7 @@ describe.only('/api', () => {
     it('GET: return status code 200 and array of articles', () => request.get('/api/articles').expect(200)
       .then(({ body }) => {
         expect(body.articles[0]).to.have.keys('title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_id', 'comment_count');
+        expect(body.articles.length).to.equal(12);
       }));
     it('GET: should filter by username query', () => request.get('/api/articles?username=rogersop')
       .expect(200)
@@ -43,6 +44,12 @@ describe.only('/api', () => {
         expect(body.articles[0].topic).to.equal('cats');
       }));
     it('GET: should take sort_by query which defaults to date', () => request.get('/api/articles?sort_by=title')
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.articles[0].title).to.equal('Z');
+      }));
+    it('GET: should take an order query that specifies asc/desc sort order, defaulting to desc', () => request.get('/api/articles?sort_by=title&order=asc')
       .expect(200)
       .then(({ body }) => {
         console.log(body);
