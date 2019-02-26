@@ -1,6 +1,4 @@
-\c knews
+\c knews_test
 
-SELECT articles.*, COUNT(comment_id) AS comment_count
-    FROM articles
-    JOIN comments ON comments.article_id = articles.article_id
-    GROUP BY articles.article_id;
+SELECT title FROM articles
+ORDER BY title;

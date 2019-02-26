@@ -10,13 +10,18 @@ exports.getArticles = (queries) => {
   const conditions = {};
   if (queries.username) conditions['articles.author'] = queries.username;
   if (queries.topic) conditions['articles.topic'] = queries.topic;
+  const order = queries.sort_by
+    ? queries.sort_by
+    : 'created_at';
+
 
   return connection.select('articles.*')
     .count({ comment_count: 'comment_id' })
     .from('articles')
     .join('comments', 'comments.article_id', 'articles.article_id')
     .groupBy('articles.article_id')
-    .where(conditions);
+    .where(conditions)
+    .orderBy(order);
 };
 exports.addArticle = newArticle => connection('articles')
   .insert(newArticle)

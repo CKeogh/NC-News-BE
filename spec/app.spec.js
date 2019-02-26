@@ -42,6 +42,12 @@ describe.only('/api', () => {
       .then(({ body }) => {
         expect(body.articles[0].topic).to.equal('cats');
       }));
+    it('GET: should take sort_by query which defaults to date', () => request.get('/api/articles?sort_by=title')
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.articles[0].title).to.equal('A');
+      }));
 
     it('POST: return status code 201 and added article', () => {
       const article = {
