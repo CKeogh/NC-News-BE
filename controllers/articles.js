@@ -10,8 +10,11 @@ exports.sendArticles = (req, res, next) => {
   const queries = req.query;
   getArticles(queries)
     .then((articles) => {
+      if (articles.length === 0) return Promise.reject({ status: 404, msg: 'not a valid query', code: '1' });
       res.status(200).send({ articles });
-    });
+      return null;
+    })
+    .catch(next);
 };
 
 exports.receiveArticle = (req, res, next) => {
@@ -45,7 +48,7 @@ exports.deleteArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
   removeArticleById(articleId)
     .then((delCount) => {
-      if (delCount === 0) return Promise.reject({ status: 404, msg: 'no article to delete', code: '23502' });
+      if (delCount === 0) return Promise.reject({ status: 404, msg: 'no article to delete', code: '2' });
       res.sendStatus(204);
       return null;
     })

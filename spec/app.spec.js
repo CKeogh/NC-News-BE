@@ -31,8 +31,8 @@ describe.only('/api', () => {
           expect(body.topic.slug).to.equal('a');
         });
     });
-    it('ERROR: should return status code 400 if post request with invalid data or slug that already exists', () => {
-      const reqBody = {};
+    it('ERROR: should return status code 400 if post request with invalid data', () => {
+      const reqBody = { baba: 1 };
       return request.post('/api/topics')
         .send(reqBody)
         .expect(400)
@@ -73,7 +73,11 @@ describe.only('/api', () => {
       .then(({ body }) => {
         expect(body.articles[0].title).to.equal('A');
       }));
-
+    it('ERROR: should return status code 404 if given incorrect query', () => request.get('/api/articles?topic=bananas')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).to.equal('not a valid query');
+      }));
     it('POST: return status code 201 and added article', () => {
       const article = {
         title: 'a',
@@ -119,10 +123,10 @@ describe.only('/api', () => {
         }));
       it('DELETE: return 204 status code and delete article by id', () => request.delete('/api/articles/1')
         .expect(204));
-      it('ERROR: should return 400 code if no article with given id found for delete request', () => request.delete('/api/articles/99999')
-        .expect(400)
+      it('ERROR: should return 404 code if no article with given id found for delete request', () => request.delete('/api/articles/99999')
+        .expect(404)
         .then(({ body }) => {
-          expect(body.msg).to.equal('Bad request');
+          expect(body.msg).to.equal('no article to delete');
         }));
     });
   });
