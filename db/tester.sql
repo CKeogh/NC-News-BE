@@ -1,7 +1,9 @@
 \c knews_test
 
-SELECT articles.title, comments.comment_id FROM articles
+SELECT articles.*, COUNT(comment_id) AS comment_count
+FROM articles
 JOIN comments ON articles.article_id = comments.article_id;
+
 
 -- [ { article_id: 5,
 --        title: 'UNCOVERED: catspiracy to bring down democracy',

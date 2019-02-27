@@ -14,14 +14,10 @@ exports.getArticles = (queries) => {
     ? queries.order
     : 'desc';
 
-  //  ---- TODO ----
-  // HOW DO I STOP IT REMOVING ARTICLES
-  // THAT DONT HAVE COMMENTS
-
   return connection.select('articles.*')
-    .count({ comment_count: 'comments.comment_id' })
+    .count({ comment_count: 'comment_id' })
     .from('articles')
-    .join('comments', 'articles.article_id', 'comments.article_id')
+    .leftJoin('comments', 'comments.article_id', 'articles.article_id')
     .groupBy('articles.article_id')
     .where(conditions)
     .orderBy(order, sortOrder);
