@@ -131,3 +131,9 @@ describe.only('/api', () => {
     });
   });
 });
+
+
+// ----- TODO -----
+
+// 1. complete error handling for /api/articles/:article_id
+// 2. get and post for/:article_id/comments
