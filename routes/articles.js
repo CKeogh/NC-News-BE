@@ -4,14 +4,20 @@ const {
   receiveArticle,
   sendArticleById,
   updateArticleVotes,
+  deleteArticleById,
 } = require('../controllers/articles');
+const {
+  handle405,
+} = require('../errors');
 
 articlesRouter.route('/')
   .get(sendArticles)
-  .post(receiveArticle);
+  .post(receiveArticle)
+  .all(handle405);
 
 articlesRouter.route('/:article_id')
   .get(sendArticleById)
-  .patch(updateArticleVotes);
+  .patch(updateArticleVotes)
+  .delete(deleteArticleById);
 
 module.exports = articlesRouter;

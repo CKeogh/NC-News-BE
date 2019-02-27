@@ -24,7 +24,7 @@ exports.getArticles = (queries) => {
 exports.addArticle = newArticle => connection('articles')
   .insert(newArticle)
   .returning('*')
-  .then(article => article[0]);
+  .then(article => article);
 
 exports.getArticleById = articleId => connection.select('articles.*')
   .count({ comment_count: 'comment_id' })
@@ -33,7 +33,7 @@ exports.getArticleById = articleId => connection.select('articles.*')
   .groupBy('articles.article_id')
   .where({ 'articles.article_id': articleId })
   .returning('*')
-  .then(article => article[0]);
+  .then(article => article);
 
 exports.changeArticleVotes = (articleId, voteChange) => connection.select('articles.*')
   .count({ comment_count: 'comment_id' })
@@ -43,7 +43,8 @@ exports.changeArticleVotes = (articleId, voteChange) => connection.select('artic
   .where({ 'articles.article_id': articleId })
   .increment('votes', voteChange)
   .returning('*')
-  .then((article) => {
-    console.log(article[0]);
-    return article[0];
-  });
+  .then(article => article);
+
+exports.removeArticleById = articleId => connection('articles')
+  .where({ article_id: articleId })
+  .del();

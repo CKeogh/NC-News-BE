@@ -3,6 +3,7 @@ const {
   addArticle,
   getArticleById,
   changeArticleVotes,
+  removeArticleById,
 } = require('../models/articles');
 
 exports.sendArticles = (req, res, next) => {
@@ -16,15 +17,16 @@ exports.sendArticles = (req, res, next) => {
 exports.receiveArticle = (req, res, next) => {
   const newArticle = req.body;
   addArticle(newArticle)
-    .then((article) => {
+    .then(([article]) => {
       res.status(201).send({ article });
-    });
+    })
+    .catch(next);
 };
 
 exports.sendArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
   getArticleById(articleId)
-    .then((article) => {
+    .then(([article]) => {
       res.status(200).send({ article });
     });
 };
@@ -34,7 +36,15 @@ exports.updateArticleVotes = (req, res, next) => {
   const voteChange = req.body.inc_votes;
 
   changeArticleVotes(articleId, voteChange)
-    .then((article) => {
+    .then(([article]) => {
       res.status(200).send({ article });
+    });
+};
+
+exports.deleteArticleById = (req, res, next) => {
+  const articleId = req.params.article_id;
+  removeArticleById(articleId)
+    .then(() => {
+      res.sendStatus(204);
     });
 };

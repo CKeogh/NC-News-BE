@@ -12,5 +12,6 @@ exports.receiveTopic = (req, res, next) => {
   addTopic(newTopic)
     .then(([topic]) => {
       res.status(201).send({ topic });
-    });
+    })
+    .catch(next);
 };

@@ -11,6 +11,12 @@ describe.only('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
 
+  it('bad url should return 404 with error message', () => request.get('/bad-url')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).to.equal('Page not found');
+    }));
+
   describe('/topics', () => {
     it('GET: return status code 200 and array of topics', () => request.get('/api/topics').expect(200)
       .then(({ body }) => {
@@ -25,6 +31,20 @@ describe.only('/api', () => {
           expect(body.topic.slug).to.equal('a');
         });
     });
+    it('ERROR: should return status code 400 if post request with invalid data or slug that already exists', () => {
+      const reqBody = {};
+      return request.post('/api/topics')
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('Bad request');
+        });
+    });
+    it('ERROR: should return status code 405 if receiving a patch / delete request', () => request.patch('/api/topics')
+      .expect(405)
+      .then(({ body }) => {
+        expect(body.msg).to.equal('Method not allowed');
+      }));
   });
 
   describe('/articles', () => {
@@ -69,7 +89,21 @@ describe.only('/api', () => {
           expect(body.article).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at');
         });
     });
-    describe.only('/:article_id', () => {
+    it('ERROR: should return status code 400 if given invalid data to post', () => {
+      const reqBody = {};
+      return request.post('/api/articles')
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('Bad request');
+        });
+    });
+    it('ERROR: should return status code 405 if patch/delete request made', () => request.delete('/api/articles')
+      .expect(405)
+      .then(({ body }) => {
+        expect(body.msg).to.equal('Method not allowed');
+      }));
+    describe('/:article_id', () => {
       it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
@@ -79,9 +113,11 @@ describe.only('/api', () => {
         .send({ inc_votes: 1 })
         .expect(200)
         .then(({ body }) => {
-          expect(body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count');
+          expect(body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');// , 'comment_count');
           expect(body.article.votes).to.equal(101);
         }));
+      it('DELETE: return 204 status code and delete article by id', () => request.delete('/api/articles/1')
+        .expect(204));
     });
   });
 });
