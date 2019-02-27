@@ -1,4 +1,9 @@
-const { getArticles, addArticle, getArticleById } = require('../models/articles');
+const {
+  getArticles,
+  addArticle,
+  getArticleById,
+  changeArticleVotes,
+} = require('../models/articles');
 
 exports.sendArticles = (req, res, next) => {
   const queries = req.query;
@@ -24,6 +29,12 @@ exports.sendArticleById = (req, res, next) => {
     });
 };
 
-exports.receiveArticleById = (req, res, next) => {
-  res.status(201).send({ mg: 'OK' });
+exports.updateArticleVotes = (req, res, next) => {
+  const articleId = req.params.article_id;
+  const voteChange = req.body.inc_votes;
+
+  changeArticleVotes(articleId, voteChange)
+    .then((article) => {
+      res.status(200).send({ article });
+    });
 };

@@ -34,3 +34,16 @@ exports.getArticleById = articleId => connection.select('articles.*')
   .where({ 'articles.article_id': articleId })
   .returning('*')
   .then(article => article[0]);
+
+exports.changeArticleVotes = (articleId, voteChange) => connection.select('articles.*')
+  .count({ comment_count: 'comment_id' })
+  .from('articles')
+  .leftJoin('comments', 'comments.article_id', 'articles.article_id')
+  .groupBy('articles.article_id')
+  .where({ 'articles.article_id': articleId })
+  .increment('votes', voteChange)
+  .returning('*')
+  .then((article) => {
+    console.log(article[0]);
+    return article[0];
+  });

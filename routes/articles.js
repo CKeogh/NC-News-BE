@@ -3,7 +3,7 @@ const {
   sendArticles,
   receiveArticle,
   sendArticleById,
-  receiveArticleById,
+  updateArticleVotes,
 } = require('../controllers/articles');
 
 articlesRouter.route('/')
@@ -12,6 +12,6 @@ articlesRouter.route('/')
 
 articlesRouter.route('/:article_id')
   .get(sendArticleById)
-  .patch(receiveArticleById);
+  .patch(updateArticleVotes);
 
 module.exports = articlesRouter;

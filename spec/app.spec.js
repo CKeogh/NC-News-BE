@@ -69,23 +69,18 @@ describe.only('/api', () => {
           expect(body.article).to.have.keys('article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at');
         });
     });
-    describe('/:article_id', () => {
+    describe.only('/:article_id', () => {
       it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
           expect(body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count');
         }));
-      xit('PATCH: return status code 201 and update article', () => request.patch('/api/articles/1').expect(201)
+      it('PATCH: returns status code 200 and updated article with votes incremented by amount in body', () => request.patch('/api/articles/1')
+        .send({ inc_votes: 1 })
+        .expect(200)
         .then(({ body }) => {
-          expect(body.article).to.eql({
-            article_id: 1,
-            title: 'Living in the shadow of a great man',
-            topic: 'mitch',
-            author: 'butter_bridge',
-            body: 'I find this existence challenging',
-            created_at: 1542284514171,
-            votes: 100,
-          });
+          expect(body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count');
+          expect(body.article.votes).to.equal(101);
         }));
     });
   });
