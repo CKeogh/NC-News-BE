@@ -46,13 +46,11 @@ describe.only('/api', () => {
     it('GET: should take sort_by query which defaults to date', () => request.get('/api/articles?sort_by=title')
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(body.articles[0].title).to.equal('Z');
       }));
     it('GET: should take an order query that specifies asc/desc sort order, defaulting to desc', () => request.get('/api/articles?sort_by=title&order=asc')
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(body.articles[0].title).to.equal('A');
       }));
 
@@ -72,7 +70,11 @@ describe.only('/api', () => {
         });
     });
     describe('/:article_id', () => {
-      it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1').expect(200));
+      it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count');
+        }));
       xit('PATCH: return status code 201 and update article', () => request.patch('/api/articles/1').expect(201)
         .then(({ body }) => {
           expect(body.article).to.eql({

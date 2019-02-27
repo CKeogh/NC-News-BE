@@ -1,5 +1,4 @@
 const connection = require('../db/connection');
-const { createRefTable, formatArticles } = require('../db/utils/seedFunctions');
 
 exports.getArticles = (queries) => {
   const conditions = {};
@@ -24,5 +23,14 @@ exports.getArticles = (queries) => {
 };
 exports.addArticle = newArticle => connection('articles')
   .insert(newArticle)
+  .returning('*')
+  .then(article => article[0]);
+
+exports.getArticleById = articleId => connection.select('articles.*')
+  .count({ comment_count: 'comment_id' })
+  .from('articles')
+  .leftJoin('comments', 'comments.article_id', 'articles.article_id')
+  .groupBy('articles.article_id')
+  .where({ 'articles.article_id': articleId })
   .returning('*')
   .then(article => article[0]);

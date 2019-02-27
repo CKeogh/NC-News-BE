@@ -1,4 +1,4 @@
-const { getArticles, addArticle } = require('../models/articles');
+const { getArticles, addArticle, getArticleById } = require('../models/articles');
 
 exports.sendArticles = (req, res, next) => {
   const queries = req.query;
@@ -17,7 +17,11 @@ exports.receiveArticle = (req, res, next) => {
 };
 
 exports.sendArticleById = (req, res, next) => {
-  res.status(200).send({ article: { OK: true } });
+  const articleId = req.params.article_id;
+  getArticleById(articleId)
+    .then((article) => {
+      res.status(200).send({ article });
+    });
 };
 
 exports.receiveArticleById = (req, res, next) => {
