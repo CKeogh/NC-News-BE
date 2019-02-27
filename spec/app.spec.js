@@ -103,6 +103,7 @@ describe.only('/api', () => {
       .then(({ body }) => {
         expect(body.msg).to.equal('Method not allowed');
       }));
+
     describe('/:article_id', () => {
       it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1')
         .expect(200)
@@ -118,6 +119,11 @@ describe.only('/api', () => {
         }));
       it('DELETE: return 204 status code and delete article by id', () => request.delete('/api/articles/1')
         .expect(204));
+      it('ERROR: should return 400 code if no article with given id found for delete request', () => request.delete('/api/articles/99999')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('Bad request');
+        }));
     });
   });
 });

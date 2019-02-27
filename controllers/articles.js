@@ -44,7 +44,10 @@ exports.updateArticleVotes = (req, res, next) => {
 exports.deleteArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
   removeArticleById(articleId)
-    .then(() => {
+    .then((delCount) => {
+      if (delCount === 0) return Promise.reject({ status: 404, msg: 'no article to delete', code: '23502' });
       res.sendStatus(204);
-    });
+      return null;
+    })
+    .catch(next);
 };

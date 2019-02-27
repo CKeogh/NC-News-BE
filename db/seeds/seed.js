@@ -20,5 +20,4 @@ exports.seed = (connection, Promise) => connection.migrate.rollback()
     const articleRef = createRefTable(insertedArticles, 'title', 'article_id');
     const formattedComments = formatComments(commentData, userRef, articleRef);
     return connection('comments').insert(formattedComments).returning('*');
-  })
-  .then(() => console.log('Database Seeded!'));
+  });
