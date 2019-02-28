@@ -7,7 +7,7 @@ const connection = require('../db/connection.js');
 
 const request = supertest(app);
 
-describe.only('/api', () => {
+describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
 
@@ -129,7 +129,7 @@ describe.only('/api', () => {
           expect(body.msg).to.equal('no article to delete');
         }));
 
-      describe.only('/comments', () => {
+      describe('/comments', () => {
         it('GET: returns status code 200 and comments array for article_id', () => request.get('/api/articles/1/comments')
           .expect(200)
           .then(({ body }) => {
@@ -163,7 +163,7 @@ describe.only('/api', () => {
       .send({ inc_votes: 1 })
       .expect(200)
       .then(({ body }) => {
-        expect(body.comment.votes).to.equal();
+        expect(body.comment.votes).to.equal(17);
       }));
   });
 });

@@ -15,7 +15,7 @@ const formatArticles = articles => articles.map(article => ({
   created_at: convertDate(article.created_at),
 }));
 
-const formatComments = (comments, userRef, articleRef) => comments.map(comment => ({
+const formatComments = (comments, articleRef) => comments.map(comment => ({
   body: comment.body,
   author: comment.created_by,
   votes: comment.votes,

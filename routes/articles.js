@@ -5,9 +5,12 @@ const {
   sendArticleById,
   updateArticleVotes,
   deleteArticleById,
-  sendArticleComments,
   receiveNewComment,
 } = require('../controllers/articles');
+
+const {
+  sendCommentsByArticleId,
+} = require('../controllers/comments');
 const {
   handle405,
 } = require('../errors');
@@ -23,7 +26,7 @@ articlesRouter.route('/:article_id')
   .delete(deleteArticleById);
 
 articlesRouter.route('/:article_id/comments')
-  .get(sendArticleComments)
+  .get(sendCommentsByArticleId)
   .post(receiveNewComment);
 
 module.exports = articlesRouter;

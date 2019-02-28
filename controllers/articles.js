@@ -4,7 +4,6 @@ const {
   getArticleById,
   changeArticleVotes,
   removeArticleById,
-  getArticleComments,
   addNewComment,
 } = require('../models/articles');
 
@@ -29,26 +28,28 @@ exports.receiveArticle = (req, res, next) => {
 };
 
 exports.sendArticleById = (req, res, next) => {
-  const articleId = req.params.article_id;
-  getArticleById(articleId)
+  const { article_id } = req.params;
+  getArticleById(article_id)
     .then(([article]) => {
       res.status(200).send({ article });
-    });
+    })
+    .catch(next);
 };
 
 exports.updateArticleVotes = (req, res, next) => {
-  const articleId = req.params.article_id;
-  const voteChange = req.body.inc_votes;
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
 
-  changeArticleVotes(articleId, voteChange)
+  changeArticleVotes(article_id, inc_votes)
     .then(([article]) => {
       res.status(200).send({ article });
-    });
+    })
+    .catch(next);
 };
 
 exports.deleteArticleById = (req, res, next) => {
-  const articleId = req.params.article_id;
-  removeArticleById(articleId)
+  const { article_id } = req.params;
+  removeArticleById(article_id)
     .then((delCount) => {
       if (delCount === 0) return Promise.reject({ status: 404, msg: 'no article to delete', code: '2' });
       res.sendStatus(204);
@@ -57,19 +58,12 @@ exports.deleteArticleById = (req, res, next) => {
     .catch(next);
 };
 
-exports.sendArticleComments = (req, res, next) => {
-  const articleId = req.params.article_id;
-  getArticleComments(articleId, req.query)
-    .then((comments) => {
-      res.status(200).send({ comments });
-    });
-};
-
 exports.receiveNewComment = (req, res, next) => {
   const { article_id } = req.params;
   const { body, username } = req.body;
   addNewComment({ body, author: username, article_id })
     .then(([comment]) => {
       res.status(201).send({ comment });
-    });
+    })
+    .catch(next);
 };

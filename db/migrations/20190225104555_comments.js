@@ -13,7 +13,8 @@ exports.up = function (knex, Promise) {
       .defaultTo(0);
     commentsTable.date('created_at')
       .defaultTo(knex.fn.now());
-    commentsTable.string('body', 500);
+    commentsTable.string('body', 500)
+      .notNullable();
   });
 };
 
