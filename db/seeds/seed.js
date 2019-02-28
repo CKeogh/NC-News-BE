@@ -17,9 +17,7 @@ exports.seed = (connection, Promise) => connection.migrate.rollback()
     return Promise.all([userRef, insertedArticles]);
   })
   .then(([userRef, insertedArticles]) => {
-    // console.log(userRef);
     const articleRef = createRefTable(insertedArticles, 'title', 'article_id');
     const formattedComments = formatComments(commentData, userRef, articleRef);
-    console.log(formattedComments);
     return connection('comments').insert(formattedComments).returning('*');
   });

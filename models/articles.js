@@ -49,8 +49,8 @@ exports.removeArticleById = articleId => connection('articles')
   .where({ article_id: articleId })
   .del();
 
-exports.getArticleComments = articleId => connection.select('users.author', 'comments.body', 'comment_id', 'comments.created_at', 'comments.votes')
+exports.getArticleComments = articleId => connection.select('comments.author', 'comments.body', 'comment_id', 'comments.created_at', 'comments.votes')
   .from('articles')
   .join('comments', 'comments.article_id', 'articles.article_id')
-  .join('users', 'comments.username', 'users.username')
+  .join('users', 'comments.author', 'users.username')
   .where({ 'articles.article_id': articleId });
