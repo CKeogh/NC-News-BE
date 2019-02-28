@@ -128,12 +128,14 @@ describe.only('/api', () => {
         .then(({ body }) => {
           expect(body.msg).to.equal('no article to delete');
         }));
+
+      describe.only('/comments', () => {
+        it('GET: returns status code 200 and comments array for article_id', () => request.get('/api/articles/1/comments')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comments[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body');
+          }));
+      });
     });
   });
 });
-
-
-// ----- TODO -----
-
-// 1. complete error handling for /api/articles/:article_id
-// 2. get and post for/:article_id/comments

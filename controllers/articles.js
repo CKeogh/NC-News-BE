@@ -4,6 +4,7 @@ const {
   getArticleById,
   changeArticleVotes,
   removeArticleById,
+  getArticleComments,
 } = require('../models/articles');
 
 exports.sendArticles = (req, res, next) => {
@@ -53,4 +54,12 @@ exports.deleteArticleById = (req, res, next) => {
       return null;
     })
     .catch(next);
+};
+
+exports.sendArticleComments = (req, res, next) => {
+  const articleId = req.params.article_id;
+  getArticleComments(articleId)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    });
 };
