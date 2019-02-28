@@ -1,5 +1,6 @@
 \c knews_test
 
-UPDATE articles SET votes + 1 WHERE article_id;
+SELECT * FROM comments
+INNER JOIN users ON users.username = comments.author;
 
-SELECT votes, article_id FROM articles;
+SELECT * FROM comments WHERE author = 'chris';

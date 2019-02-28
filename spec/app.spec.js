@@ -135,7 +135,35 @@ describe.only('/api', () => {
           .then(({ body }) => {
             expect(body.comments[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body');
           }));
+        it('GET: should also take query for sort_by and order', () => request.get('/api/articles/1/comments?sort_by=votes&order=asc')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comments[0].votes).to.equal(-100);
+          }));
+        it('POST: returns status code 201 and posted comment', () => {
+          const newComment = {
+            username: 'rogersop',
+            body: 'hello',
+          };
+          return request.post('/api/articles/1/comments')
+            .send(newComment)
+            .expect(201)
+            .then(({ body }) => {
+              expect(body.comment.body).to.equal(newComment.body);
+              expect(body.comment.author).to.equal(newComment.username);
+              expect(body.comment).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body', 'article_id');
+            });
+        });
       });
     });
+  });
+
+  xdescribe('/comments/:comment_id', () => {
+    it('PATCH: returns status code 200 and updates votes value for comment of comment_id', () => request.patch('/api/comments/1')
+      .send({ inc_votes: 1 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comment.votes).to.equal();
+      }));
   });
 });
