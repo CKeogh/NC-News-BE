@@ -23,10 +23,12 @@ articlesRouter.route('/')
 articlesRouter.route('/:article_id')
   .get(sendArticleById)
   .patch(updateArticleVotes)
-  .delete(deleteArticleById);
+  .delete(deleteArticleById)
+  .all(handle405);
 
 articlesRouter.route('/:article_id/comments')
   .get(sendCommentsByArticleId)
-  .post(receiveNewComment);
+  .post(receiveNewComment)
+  .all(handle405);
 
 module.exports = articlesRouter;

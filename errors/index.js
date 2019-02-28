@@ -1,6 +1,8 @@
 exports.handle400 = (err, req, res, next) => {
   if (err.code === '23502' || err.code === '42703') {
     res.status(400).send({ msg: 'Bad request' });
+  } else if (err.msg === 'topic already exists') {
+    res.status(400).send({ msg: err.msg });
   } else next(err);
 };
 

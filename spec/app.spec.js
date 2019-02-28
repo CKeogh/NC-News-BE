@@ -7,7 +7,7 @@ const connection = require('../db/connection.js');
 
 const request = supertest(app);
 
-describe('/api', () => {
+describe.only('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
 
@@ -38,6 +38,15 @@ describe('/api', () => {
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).to.equal('Bad request');
+        });
+    });
+    it('ERROR: should return status code 400 if post request with slug already in database', () => {
+      const reqBody = { slug: 'cats', description: 'xxxx' };
+      return request.post('/api/topics')
+        .send(reqBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('topic already exists');
         });
     });
     it('ERROR: should return status code 405 if receiving a patch / delete request', () => request.patch('/api/topics')
@@ -158,7 +167,7 @@ describe('/api', () => {
     });
   });
 
-  xdescribe('/comments/:comment_id', () => {
+  describe('/comments/:comment_id', () => {
     it('PATCH: returns status code 200 and updates votes value for comment of comment_id', () => request.patch('/api/comments/1')
       .send({ inc_votes: 1 })
       .expect(200)

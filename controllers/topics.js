@@ -1,4 +1,4 @@
-const { getTopics, addTopic } = require('../models/topics');
+const { getTopics, addTopic, getAllSlugs } = require('../models/topics');
 
 exports.sendTopics = (req, res, next) => {
   getTopics()
@@ -10,7 +10,13 @@ exports.sendTopics = (req, res, next) => {
 
 exports.receiveTopic = (req, res, next) => {
   const newTopic = req.body;
-  addTopic(newTopic)
+  getAllSlugs()
+    .then((slugs) => {
+      if (slugs.includes(newTopic.slug)) {
+        next({ status: 400, msg: 'topic already exists' });
+      }
+    })
+    .then(() => addTopic(newTopic))
     .then(([topic]) => {
       res.status(201).send({ topic });
     })

@@ -6,3 +6,7 @@ exports.getTopics = () => connection('topics')
 exports.addTopic = newTopic => connection('topics')
   .insert(newTopic)
   .returning('*');
+
+exports.getAllSlugs = () => connection.select('slug')
+  .from('topics')
+  .then(slugs => slugs.map(slug => slug.slug));
