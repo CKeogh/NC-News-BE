@@ -1,4 +1,8 @@
 const connection = require('../db/connection');
 
-exports.getUsers = () => connection.select('*')
-  .from('users');
+exports.getUsers = () => connection('users')
+  .select('*');
+
+exports.addUser = newUser => connection('users')
+  .insert(newUser)
+  .returning('*');

@@ -222,12 +222,22 @@ describe('/api', () => {
       .expect(405));
   });
 
-  describe('/users', () => {
+  describe.only('/users', () => {
     it('GET: should respond with status 200 and array of user objects', () => request.get('/api/users')
       .expect(200)
       .then(({ body }) => {
         expect(body.users[0]).to.have.keys('username', 'avatar_url', 'name');
         expect(body.users.length).to.equal(3);
       }));
+    it('POST: should respond with status 201 and added user', () => {
+      const newUser = { username: 'CKeogh', avatar_url: 'xxx', name: 'chris' };
+      return request.post('/api/users')
+        .send(newUser)
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.user.username).to.equal(newUser.username);
+          expect(body.user).to.have.keys('username', 'avatar_url', 'name');
+        });
+    });
   });
 });
