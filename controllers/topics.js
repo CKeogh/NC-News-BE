@@ -13,7 +13,7 @@ exports.receiveTopic = (req, res, next) => {
   getAllSlugs()
     .then((slugs) => {
       if (slugs.includes(newTopic.slug)) {
-        next({ status: 400, msg: 'topic already exists' });
+        next({ status: 422 });
       }
     })
     .then(() => addTopic(newTopic))

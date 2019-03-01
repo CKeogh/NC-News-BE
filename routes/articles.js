@@ -5,11 +5,11 @@ const {
   sendArticleById,
   updateArticleVotes,
   deleteArticleById,
-  receiveNewComment,
 } = require('../controllers/articles');
 
 const {
   sendCommentsByArticleId,
+  receiveNewComment,
 } = require('../controllers/comments');
 const {
   handle405,

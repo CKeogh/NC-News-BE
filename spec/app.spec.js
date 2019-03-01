@@ -7,7 +7,7 @@ const connection = require('../db/connection.js');
 
 const request = supertest(app);
 
-describe.only('/api', () => {
+describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
 
@@ -32,7 +32,7 @@ describe.only('/api', () => {
         });
     });
     it('ERROR: should return status code 400 if post request with invalid data', () => {
-      const reqBody = { baba: 1 };
+      const reqBody = { baba: 1, descriptions: 'xxx' };
       return request.post('/api/topics')
         .send(reqBody)
         .expect(400)
@@ -40,13 +40,19 @@ describe.only('/api', () => {
           expect(body.msg).to.equal('Bad request');
         });
     });
-    it('ERROR: should return status code 400 if post request with slug already in database', () => {
+    it('ERROR: should return status code 400 if post request missing description property', () => {
+      const reqBody = { slug: 'a' };
+      return request.post('/api/topics')
+        .send(reqBody)
+        .expect(400);
+    });
+    it('ERROR: should return status code 422 if post request with slug already in database', () => {
       const reqBody = { slug: 'cats', description: 'xxxx' };
       return request.post('/api/topics')
         .send(reqBody)
-        .expect(400)
+        .expect(422)
         .then(({ body }) => {
-          expect(body.msg).to.equal('topic already exists');
+          expect(body.msg).to.equal('unprocessable entity');
         });
     });
     it('ERROR: should return status code 405 if receiving a patch / delete request', () => request.patch('/api/topics')
@@ -82,10 +88,15 @@ describe.only('/api', () => {
       .then(({ body }) => {
         expect(body.articles[0].title).to.equal('A');
       }));
-    it('ERROR: should return status code 404 if given incorrect query', () => request.get('/api/articles?topic=bananas')
-      .expect(404)
+    xit('GET: should ignore invalid sort_by query', () => request.get('/api/articles?sort_by=banana')
+      .expect(200)
       .then(({ body }) => {
-        expect(body.msg).to.equal('not a valid query');
+        expect(body.articles[0].title).to.equal('Living in the shadow of a great man');
+      }));
+    it('GET: should return status code 200 and empty array if given query that does not exist', () => request.get('/api/articles?topic=bananas')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).to.eql([]);
       }));
     it('POST: return status code 201 and added article', () => {
       const article = {
@@ -130,8 +141,18 @@ describe.only('/api', () => {
           expect(body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');// , 'comment_count');
           expect(body.article.votes).to.equal(101);
         }));
+      it('PATCH: should increment by 0 when no body given', () => request.patch('/api/articles/1')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article.votes).to.equal(100);
+        }));
       it('DELETE: return 204 status code and delete article by id', () => request.delete('/api/articles/1')
         .expect(204));
+      it('ERROR: returns 400 bad request if article_id does not exist', () => request.get('/api/articles/9999')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('article does not exist');
+        }));
       it('ERROR: should return 404 code if no article with given id found for delete request', () => request.delete('/api/articles/99999')
         .expect(404)
         .then(({ body }) => {
@@ -163,6 +184,11 @@ describe.only('/api', () => {
               expect(body.comment).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body', 'article_id');
             });
         });
+        it('ERROR: should return status code 400  for non-existent article_id', () => request.get('/api/articles/99999/comments')
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('article does not exist');
+          }));
       });
     });
   });
