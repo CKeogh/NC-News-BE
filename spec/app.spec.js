@@ -244,8 +244,16 @@ describe('/api', () => {
   describe.only('/', () => {
     it('GET: return status 200 and serves JSON describing all available endpoints', () => request.get('/api')
       .expect(200)
-      .then(({ body }) => {
-        expect(body).to.be.a('string');
+      .then(({ text }) => {
+        const keys = [
+          '/api/articles',
+          '/api/articles/:article_id',
+          '/api/articles/:article_id/comments',
+          '/api/comments/:comment_id',
+          '/api/topics',
+          '/api/users',
+        ];
+        expect(JSON.parse(text)).to.have.key(keys);
       }));
   });
 });

@@ -60,7 +60,30 @@ exports.getAllEndPoints = () => {
       },
     },
     '/api/comments/:comment_id': {
-
+      PATCH: {
+        description: 'updates votes for comment_id',
+        returns: 'updated comment',
+        expects: 'object with key inc_votes which should be a number',
+      },
+      DELETE: {
+        description: 'deletes comment with comment_id',
+        returns: 'nothing',
+      },
+    },
+    '/api/users': {
+      GET: {
+        description: 'serves up all users in database',
+        returns: 'array of objects with keys username, avatar_url, name',
+      },
+      POST: {
+        description: 'adds a new user to database',
+        returns: 'newly added user',
+        expects: 'object with keys username, avatar_url, name',
+      },
     },
   };
+
+  return new Promise((resolve, reject) => {
+    resolve(api);
+  });
 };
