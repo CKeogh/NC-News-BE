@@ -128,7 +128,7 @@ describe('/api', () => {
         expect(body.msg).to.equal('Method not allowed');
       }));
 
-    describe('/:article_id', () => {
+    describe.only('/:article_id', () => {
       it('GET: return status code 200 and article from given id', () => request.get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
@@ -145,6 +145,12 @@ describe('/api', () => {
         .expect(200)
         .then(({ body }) => {
           expect(body.article.votes).to.equal(100);
+        }));
+      it('ERROR: returns status 400 when given invalid inc_votes', () => request.patch('/api/articles/1')
+        .send({ inc_votes: 'banana' })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('Bad request');
         }));
       it('DELETE: return 204 status code and delete article by id', () => request.delete('/api/articles/1')
         .expect(204));

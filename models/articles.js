@@ -34,18 +34,15 @@ exports.getArticleById = articleId => connection.select('articles.*')
   .returning('*')
   .then(article => article);
 
-exports.changeArticleVotes = (articleId, voteChange) => {
-  voteChange = voteChange || 0;
-  return connection.select('articles.*')
-    .count({ comment_count: 'comment_id' })
-    .from('articles')
-    .leftJoin('comments', 'comments.article_id', 'articles.article_id')
-    .groupBy('articles.article_id')
-    .where({ 'articles.article_id': articleId })
-    .increment('votes', voteChange)
-    .returning('*')
-    .then(article => article);
-};
+exports.changeArticleVotes = (articleId, voteChange) => connection.select('articles.*')
+  .count({ comment_count: 'comment_id' })
+  .from('articles')
+  .leftJoin('comments', 'comments.article_id', 'articles.article_id')
+  .groupBy('articles.article_id')
+  .where({ 'articles.article_id': articleId })
+  .increment('votes', voteChange)
+  .returning('*')
+  .then(article => article);
 exports.removeArticleById = articleId => connection('articles')
   .where({ article_id: articleId })
   .del();

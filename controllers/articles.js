@@ -7,15 +7,6 @@ const {
   getArticleColumns,
 } = require('../models/articles');
 
-// exports.sendArticles = (req, res, next) => {
-//   const queries = req.query;
-//   getArticles(queries)
-//     .then((articles) => {
-//       res.status(200).send({ articles });
-//     })
-//     .catch(next);
-// };
-
 exports.sendArticles = (req, res, next) => {
   const queries = req.query;
   getArticleColumns()
@@ -49,9 +40,12 @@ exports.sendArticleById = (req, res, next) => {
 
 exports.updateArticleVotes = (req, res, next) => {
   const { article_id } = req.params;
-  const { inc_votes } = req.body;
+  const inc_votes = req.body.inc_votes || 0;
 
-  changeArticleVotes(article_id, inc_votes)
+  if (typeof inc_votes !== 'number') {
+    return next({ msg: 'Bad request' });
+  }
+  return changeArticleVotes(article_id, inc_votes)
     .then(([article]) => {
       res.status(200).send({ article });
     })
