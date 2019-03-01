@@ -1,4 +1,9 @@
-const { changeCommentVotes, getCommentsByArticleId, addNewComment } = require('../models/comments');
+const {
+  changeCommentVotes,
+  getCommentsByArticleId,
+  addNewComment,
+  removeCommentById,
+} = require('../models/comments');
 const { getArticleById } = require('../models/articles');
 
 exports.sendCommentsByArticleId = (req, res, next) => {
@@ -42,4 +47,12 @@ exports.updateCommentVotes = (req, res, next) => {
       })
       .catch(next);
   }
+};
+
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  removeCommentById(comment_id)
+    .then(() => {
+      res.sendStatus(204);
+    });
 };

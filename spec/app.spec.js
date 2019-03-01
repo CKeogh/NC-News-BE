@@ -193,7 +193,7 @@ describe('/api', () => {
     });
   });
 
-  describe.only('/comments/:comment_id', () => {
+  describe('/comments/:comment_id', () => {
     it('PATCH: returns status code 200 and updates votes value for comment of comment_id', () => request.patch('/api/comments/1')
       .send({ inc_votes: 1 })
       .expect(200)
@@ -218,5 +218,16 @@ describe('/api', () => {
       }));
     it('DELETE: should return 204 status and no content', () => request.delete('/api/comments/1')
       .expect(204));
+    it('ERROR: invalide methods should respond with 405', () => request.get('/api/comments/1')
+      .expect(405));
+  });
+
+  describe('/users', () => {
+    it('GET: should respond with status 200 and array of user objects', () => request.get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users[0]).to.have.keys('username', 'avatar_url', 'name');
+        expect(body.users.length).to.equal(3);
+      }));
   });
 });
