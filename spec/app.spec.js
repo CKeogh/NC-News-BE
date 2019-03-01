@@ -222,7 +222,7 @@ describe('/api', () => {
       .expect(405));
   });
 
-  describe.only('/users', () => {
+  describe('/users', () => {
     it('GET: should respond with status 200 and array of user objects', () => request.get('/api/users')
       .expect(200)
       .then(({ body }) => {
@@ -239,5 +239,13 @@ describe('/api', () => {
           expect(body.user).to.have.keys('username', 'avatar_url', 'name');
         });
     });
+  });
+
+  describe.only('/', () => {
+    it('GET: return status 200 and serves JSON describing all available endpoints', () => request.get('/api')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).to.be.a('string');
+      }));
   });
 });
