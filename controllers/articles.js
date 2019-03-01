@@ -4,16 +4,28 @@ const {
   getArticleById,
   changeArticleVotes,
   removeArticleById,
-  addNewComment,
+  getArticleColumns,
 } = require('../models/articles');
+
+// exports.sendArticles = (req, res, next) => {
+//   const queries = req.query;
+//   getArticles(queries)
+//     .then((articles) => {
+//       res.status(200).send({ articles });
+//     })
+//     .catch(next);
+// };
 
 exports.sendArticles = (req, res, next) => {
   const queries = req.query;
-  getArticles(queries)
+  getArticleColumns()
+    .then((columns) => {
+      if (!columns.includes(queries.sort_by)) queries.sort_by = 'created_at';
+      return getArticles(queries);
+    })
     .then((articles) => {
       res.status(200).send({ articles });
-    })
-    .catch(next);
+    });
 };
 
 exports.receiveArticle = (req, res, next) => {

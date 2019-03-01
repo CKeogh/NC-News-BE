@@ -18,13 +18,10 @@ exports.addNewComment = newComment => connection('comments')
   .returning('*')
   .then(comment => comment);
 
-exports.changeCommentVotes = (commentId, voteChange) => {
-  const buffer = '';
-  return connection('comments')
-    .where({ comment_id: commentId })
-    .increment('votes', voteChange)
-    .returning('*');
-};
+exports.changeCommentVotes = (commentId, voteChange) => connection('comments')
+  .where({ comment_id: commentId })
+  .increment('votes', voteChange)
+  .returning('*');
 
 exports.removeCommentById = commentId => connection('comments')
   .where({ comment_id: commentId })

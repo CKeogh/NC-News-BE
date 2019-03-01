@@ -88,7 +88,7 @@ describe('/api', () => {
       .then(({ body }) => {
         expect(body.articles[0].title).to.equal('A');
       }));
-    xit('GET: should ignore invalid sort_by query', () => request.get('/api/articles?sort_by=banana')
+    it('GET: should ignore invalid sort_by query', () => request.get('/api/articles?sort_by=banana')
       .expect(200)
       .then(({ body }) => {
         expect(body.articles[0].title).to.equal('Living in the shadow of a great man');
@@ -241,7 +241,7 @@ describe('/api', () => {
     });
   });
 
-  describe.only('/', () => {
+  describe('/', () => {
     it('GET: return status 200 and serves JSON describing all available endpoints', () => request.get('/api')
       .expect(200)
       .then(({ text }) => {

@@ -16,6 +16,10 @@ exports.getArticles = (queries) => {
     .orderBy(order, sortOrder);
 };
 
+exports.getArticleColumns = () => connection.select('*')
+  .from('articles')
+  .then(articles => Object.keys(articles[0]));
+
 exports.addArticle = newArticle => connection('articles')
   .insert(newArticle)
   .returning('*')

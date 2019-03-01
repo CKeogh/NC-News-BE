@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const {
   createRefTable,
   formatArticles,
-  convertDate,
   formatComments,
 } = require('../db/utils/seedFunctions');
 
