@@ -5,6 +5,8 @@ exports.handle400 = (err, req, res, next) => {
     res.status(400).send({ msg: err.msg });
   } else if (err.msg === 'article does not exist') {
     res.status(400).send({ msg: err.msg });
+  } else if (err.msg === 'Bad request') {
+    res.status(400).send({ msg: err.msg });
   } else next(err);
 };
 
@@ -16,7 +18,9 @@ exports.handle422 = (err, req, res, next) => {
 
 exports.handle404 = (err, req, res, next) => {
   if (err.code === '1' || err.code === '2') res.status(err.status).send({ msg: err.msg });
-  else next(err);
+  else if (err.msg === 'Page not found') {
+    res.status(404).send({ msg: err.msg });
+  } else next(err);
 };
 
 exports.handle500 = (err, req, res, next) => {

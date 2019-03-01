@@ -205,5 +205,18 @@ describe('/api', () => {
       .then(({ body }) => {
         expect(body.comment.votes).to.equal(16);
       }));
+    it('ERROR: should return 404 if comment does not exist', () => request.patch('/api/comments/9999')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).to.equal('Page not found');
+      }));
+    it('ERROR: should return 400 if given invalid inc_votes', () => request.patch('/api/comments/1')
+      .send({ inc_votes: 'a' })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).to.equal('Bad request');
+      }));
+    it('DELETE: should return 204 status and no content', () => request.delete('/api/comments/1')
+      .expect(204));
   });
 });

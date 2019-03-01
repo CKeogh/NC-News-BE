@@ -29,9 +29,17 @@ exports.receiveNewComment = (req, res, next) => {
 exports.updateCommentVotes = (req, res, next) => {
   const { comment_id } = req.params;
   const inc_votes = req.body.inc_votes || 0;
-  changeCommentVotes(comment_id, inc_votes)
-    .then(([comment]) => {
-      res.status(200).send({ comment });
-    })
-    .catch(next);
+  if (typeof inc_votes !== 'number') {
+    next({ msg: 'Bad request' });
+  } else {
+    changeCommentVotes(comment_id, inc_votes)
+      .then(([comment]) => {
+        if (!comment) {
+          next({ msg: 'Page not found' });
+        } else {
+          res.status(200).send({ comment });
+        }
+      })
+      .catch(next);
+  }
 };
