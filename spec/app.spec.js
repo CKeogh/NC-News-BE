@@ -193,12 +193,17 @@ describe('/api', () => {
     });
   });
 
-  describe('/comments/:comment_id', () => {
+  describe.only('/comments/:comment_id', () => {
     it('PATCH: returns status code 200 and updates votes value for comment of comment_id', () => request.patch('/api/comments/1')
       .send({ inc_votes: 1 })
       .expect(200)
       .then(({ body }) => {
         expect(body.comment.votes).to.equal(17);
+      }));
+    it('PATCH: should increment by 0 if no data given in body', () => request.patch('/api/comments/1')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comment.votes).to.equal(16);
       }));
   });
 });

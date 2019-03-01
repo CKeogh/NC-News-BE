@@ -16,22 +16,22 @@ exports.sendCommentsByArticleId = (req, res, next) => {
     .catch(next);
 };
 
-exports.updateCommentVotes = (req, res, next) => {
-  const { comment_id } = req.params;
-  const { inc_votes } = req.body.inc_votes;
-  changeCommentVotes(comment_id, inc_votes)
-    .then(([comment]) => {
-      res.status(200).send({ comment });
-    })
-    .catch(next);
-};
-
 exports.receiveNewComment = (req, res, next) => {
   const { article_id } = req.params;
   const { body, username } = req.body;
   addNewComment({ body, author: username, article_id })
     .then(([comment]) => {
       res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.updateCommentVotes = (req, res, next) => {
+  const { comment_id } = req.params;
+  const inc_votes = req.body.inc_votes || 0;
+  changeCommentVotes(comment_id, inc_votes)
+    .then(([comment]) => {
+      res.status(200).send({ comment });
     })
     .catch(next);
 };
