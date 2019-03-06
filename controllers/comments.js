@@ -8,14 +8,17 @@ const { getArticleById } = require('../models/articles');
 
 exports.sendCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
-  getArticleById(article_id)
+  if (Number.isNaN(+article_id)) {
+    return next({ msg: 'Bad request' });
+  }
+  return getArticleById(article_id)
     .then(([article]) => article)
     .then((article) => {
       if (!article) return article;
       return getCommentsByArticleId(article_id, req.query);
     })
     .then((comments) => {
-      if (!comments) next({ msg: 'article does not exist' });
+      if (!comments) next({ msg: 'Page not found' });
       else res.status(200).send({ comments });
     })
     .catch(next);
@@ -23,8 +26,11 @@ exports.sendCommentsByArticleId = (req, res, next) => {
 
 exports.receiveNewComment = (req, res, next) => {
   const { article_id } = req.params;
+  if (Number.isNaN(+article_id)) {
+    return next({ msg: 'Bad request' });
+  }
   const { body, username } = req.body;
-  addNewComment({ body, author: username, article_id })
+  return addNewComment({ body, author: username, article_id })
     .then(([comment]) => {
       res.status(201).send({ comment });
     })

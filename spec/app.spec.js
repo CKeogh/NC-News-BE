@@ -176,6 +176,12 @@ describe('/api', () => {
           .then(({ body }) => {
             expect(body.comments[0].votes).to.equal(-100);
           }));
+        it('GET: should be able to sort by author', () => request.get('/api/articles/1/comments?sort_by=author')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comments[0].author).to.equal('icellusedkars');
+            expect(body.comments[1].author).to.equal('icellusedkars');
+          }));
         it('POST: returns status code 201 and posted comment', () => {
           const newComment = {
             username: 'rogersop',
@@ -190,11 +196,17 @@ describe('/api', () => {
               expect(body.comment).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body', 'article_id');
             });
         });
-        it('ERROR: should return status code 400  for non-existent article_id', () => request.get('/api/articles/99999/comments')
-          .expect(400)
+        it('ERROR: 404 if given a non-existent article_id', () => request.get('/api/articles/99999/comments')
+          .expect(404)
           .then(({ body }) => {
-            expect(body.msg).to.equal('article does not exist');
+            expect(body.msg).to.equal('Page not found');
           }));
+        it('ERROR: 405 if given an invalid method request', () => request.patch('/api/articles/1/comments')
+          .expect(405));
+        it('ERROR: 400 if given an invalid article_id', () => request.get('/api/articles/a/comments')
+          .expect(400));
+        it('ERROR: 400 if given an invalid article_id for post request', () => request.post('/api/articles/a/comments')
+          .expect(400));
       });
     });
   });
@@ -224,7 +236,7 @@ describe('/api', () => {
       }));
     it('DELETE: should return 204 status and no content', () => request.delete('/api/comments/1')
       .expect(204));
-    it('ERROR: invalide methods should respond with 405', () => request.get('/api/comments/1')
+    it('ERROR: invalid methods should respond with 405', () => request.get('/api/comments/1')
       .expect(405));
   });
 
