@@ -8,9 +8,11 @@ const { getArticleById } = require('../models/articles');
 
 exports.sendCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
+
   if (Number.isNaN(+article_id)) {
     return next({ msg: 'Bad request' });
   }
+
   return getArticleById(article_id)
     .then(([article]) => article)
     .then((article) => {
@@ -26,9 +28,11 @@ exports.sendCommentsByArticleId = (req, res, next) => {
 
 exports.receiveNewComment = (req, res, next) => {
   const { article_id } = req.params;
+
   if (Number.isNaN(+article_id)) {
     return next({ msg: 'Bad request' });
   }
+
   const { body, username } = req.body;
   return addNewComment({ body, author: username, article_id })
     .then(([comment]) => {
@@ -40,6 +44,7 @@ exports.receiveNewComment = (req, res, next) => {
 exports.updateCommentVotes = (req, res, next) => {
   const { comment_id } = req.params;
   const inc_votes = req.body.inc_votes || 0;
+
   if (typeof inc_votes !== 'number') {
     next({ msg: 'Bad request' });
   } else {
@@ -57,6 +62,7 @@ exports.updateCommentVotes = (req, res, next) => {
 
 exports.deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params;
+
   removeCommentById(comment_id)
     .then(() => {
       res.sendStatus(204);
