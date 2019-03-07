@@ -113,3 +113,40 @@ Then seed your databases with the following script:
 ```
 npm run seed
 ```
+You can check that the data has been seeded correctly by accessing it directly through *PSQL*. To do this simpy type psql into the terminal.
+```
+psql
+```
+this will open *PSQL* in the terminal. To enter the specific database type:
+
+```
+\c knews
+```
+And then to test that there is data inside use:
+```
+SELECT * FROM topics;
+```
+
+This should return a table of topics with a slug column and a description column. The slugs should include 'coding', 'football' and 'cooking'.
+
+Now that we know the data has been seeded successfully we can access some of the endpoints that are available to us.
+In the terminal, run the following script:
+```
+node listen.js
+```
+this will make your server listen out for requests on local port 9090.
+Next, go to the browser and type **localhost:9090/api** in the url search bar. This endpoint will provide you with a json describing all the available endpoints and their request methods.
+```json
+"end_points": {
+  "/api/topics": {
+    "GET": {
+      "description": "serves up all topics in database",
+      "returns": "array of topics with keys slug, description"
+    },
+    "POST": {
+      "desciption": "adds a new topic to database",
+      "returns": "the newly added topic",
+      "expects": "object with keys slug (must be unique), description"
+      }...
+```
+ Feel free to explore these to get an idea of the formatting of the data.
