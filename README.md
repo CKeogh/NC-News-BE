@@ -44,7 +44,7 @@ eg:
 npm i chai -D
 ```
 
-You will also need to ensure that *PostgreSQL* is installed on your machine. To do this, follow the instructions in the link below:
+Make sure that *PostgreSQL* is installed on your machine. To do this, follow the instructions in the link below:
 
 https://www.postgresql.org/docs/9.3/tutorial-install.html
 
@@ -94,3 +94,22 @@ module.exports = { ...dbConfig[ENV], ...baseConfig };
 ****
 **TO-DO NEXT** ---> INSTRUCTIONS ON HOW TO GET DEV ENV RUNNING (RUN SEED FILE ETC)
 ****
+
+### Creating and Seeding Databases
+
+Next, run the following in your terminal:
+
+```
+npm run setup-dbs
+```
+This will create a new database for your dev data and your test data. Now you can run the following migration scripts to ensure that all the tables are added to the databases:
+
+```
+npm run migrate-rollback
+npm run migrate-latest
+```
+
+Then seed your databases with the following script:
+```
+npm run seed
+```

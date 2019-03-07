@@ -4,7 +4,7 @@ exports.getAllEndPoints = () => {
     '/api/topics': {
       GET: {
         description: 'serves up all topics in database',
-        return: 'array of topics with keys slug, description',
+        returns: 'array of topics with keys slug, description',
       },
       POST: {
         desciption: 'adds a new topic to database',
@@ -15,7 +15,7 @@ exports.getAllEndPoints = () => {
     '/api/articles': {
       GET: {
         description: 'serves up all articles in database',
-        return: 'array of articles with keys title, topic, author, body, created_at, votes',
+        returns: 'array of articles with keys title, topic, author, body, created_at, votes',
         queries: {
           username: 'valid username',
           topic: 'valid topic',
