@@ -91,9 +91,6 @@ module.exports = { ...dbConfig[ENV], ...baseConfig };
 ```
 **N.B.** Mac users will not need to include the username and password in the dbConfig object.
 
-****
-**TO-DO NEXT** ---> INSTRUCTIONS ON HOW TO GET DEV ENV RUNNING (RUN SEED FILE ETC)
-****
 
 ### Creating and Seeding Databases
 
@@ -150,3 +147,12 @@ Next, go to the browser and type **localhost:9090/api** in the url search bar. T
       }...
 ```
  Feel free to explore these to get an idea of the formatting of the data.
+
+## Testing
+
+To execute the test files use:
+
+```
+npm test
+```
+This will run the utils.spec.js and app.spec.js. The former will test the utility functions implemented in the migration files and the latter will test every endpoint and its permitted request methods.
