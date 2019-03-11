@@ -11,7 +11,7 @@ describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
 
-  it('bad url should return 404 with error message', () => request.get('/bad-url')
+  it('ERROR: 404 when given non-existent url', () => request.get('/bad-url')
     .expect(404)
     .then(({ body }) => {
       expect(body.msg).to.equal('Page not found');

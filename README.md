@@ -155,4 +155,27 @@ To execute the test files use:
 ```
 npm test
 ```
-This will run the utils.spec.js and app.spec.js. The former will test the utility functions implemented in the migration files and the latter will test every endpoint and its permitted request methods.
+This will run the *Mocha* test suite, which will then search the spec folder for test files. The current spec files are *utils.spec.js*,  which will test the utility functions implemented in the migration files, and *app.spec.js*, which will test every endpoint and its permitted request methods.
+The endpoint tests are nested in accordance with the endpoints themselves. e.g.
+
+```javascript
+describe('/api', () => {
+  beforeEach(() => connection.seed.run());
+  after(() => connection.destroy());
+
+  it('ERROR: 404 when given non-existent url', () => request.get('/bad-url')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).to.equal('Page not found');
+    }));
+
+  describe('/topics', () => {
+    it('GET: return status code 200 and array of topics', () => request.get('/api/topics').expect(200)
+      .then(({ body }) => {
+        expect(body.topics[0]).to.have.keys('slug', 'description');
+      }));
+```
+
+Notice in this example how the ```describe('/topics', () => {})``` block is inside of the ```describe('/api', () => {})``` block in the same way that ```/api/topics``` is routed through ```/api```. 
+The ```beforeEach(() => connection.seed.run());``` at the start will re-seed the test database each time the test suite is run to ensure the data being tested is consistent, and the   ```after(() => connection.destroy());``` ensures that the connection to the database doesn't hang when the tests are complete.
+
