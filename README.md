@@ -177,5 +177,9 @@ describe('/api', () => {
 ```
 
 Notice in this example how the ```describe('/topics', () => {})``` block is inside of the ```describe('/api', () => {})``` block in the same way that ```/api/topics``` is routed through ```/api```. 
+<br>
 The ```beforeEach(() => connection.seed.run());``` at the start will re-seed the test database each time the test suite is run to ensure the data being tested is consistent, and the   ```after(() => connection.destroy());``` ensures that the connection to the database doesn't hang when the tests are complete.
 
+## Acknowledgements
+
+Thanks to all the tutors and staff at NorthCoders who made the building of this API as painless as possible!
