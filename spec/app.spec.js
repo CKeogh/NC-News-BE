@@ -271,7 +271,7 @@ describe('/api', () => {
           '/api/topics',
           '/api/users',
         ];
-        expect(JSON.parse(text)).to.have.key(keys);
+        expect(JSON.parse(text).end_points).to.have.key(keys);
       }));
   });
 });
