@@ -8,7 +8,7 @@ exports.getArticles = (queries) => {
   const sortOrder = queries.order || 'desc';
 
   return connection.select('articles.*')
-    .count({ comment_count: 'comment_id' })
+    .count({ comment_count: 'comments.comment_id' })
     .from('articles')
     .leftJoin('comments', 'comments.article_id', 'articles.article_id')
     .groupBy('articles.article_id')
