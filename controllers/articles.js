@@ -4,16 +4,13 @@ const {
   getArticleById,
   changeArticleVotes,
   removeArticleById,
-  getArticleColumns,
 } = require('../models/articles');
 
 exports.sendArticles = (req, res, next) => {
   const queries = req.query;
-  getArticleColumns()
-    .then((columns) => {
-      if (!columns.includes(queries.sort_by)) queries.sort_by = 'created_at';
-      return getArticles(queries);
-    })
+  const columns = ['article_id', 'title', 'body', 'votes', 'topic', 'author', 'created_at', 'comment_count'];
+  if (!columns.includes(queries.sort_by)) queries.sort_by = 'created_at';
+  getArticles(queries)
     .then((articles) => {
       res.status(200).send({ articles });
     });

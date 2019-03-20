@@ -8,12 +8,12 @@ exports.getArticles = (queries) => {
   const sortOrder = queries.order || 'desc';
 
   return connection.select('articles.*')
-    .count({ comment_count: 'comments.comment_id' })
+    .count('comments.comment_id as comment_count')
     .from('articles')
     .leftJoin('comments', 'comments.article_id', 'articles.article_id')
+    .orderBy(order, sortOrder)
     .groupBy('articles.article_id')
-    .where(conditions)
-    .orderBy(order, sortOrder);
+    .where(conditions);
 };
 
 exports.getArticleColumns = () => connection.select('*')
