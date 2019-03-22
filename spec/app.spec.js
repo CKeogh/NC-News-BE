@@ -259,6 +259,14 @@ describe('/api', () => {
     });
   });
 
+  describe.only('/users/:username', () => {
+    it('GET: should return a single user from given username', () => request.get('/api/users/rogersop')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user.username).to.equal('rogersop');
+      }));
+  });
+
   describe('/', () => {
     it('GET: return status 200 and serves JSON describing all available endpoints', () => request.get('/api')
       .expect(200)
