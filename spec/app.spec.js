@@ -270,6 +270,11 @@ describe('/api', () => {
       .then(({ body }) => {
         expect(body.user.username).to.equal('rogersop');
       }));
+    it('ERROR: 404: if username not in database', () => request.get('/api/users/sdfksjd')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).to.equal('Page not found');
+      }));
   });
 
   describe('/', () => {
