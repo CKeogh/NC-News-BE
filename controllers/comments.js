@@ -34,6 +34,10 @@ exports.receiveNewComment = (req, res, next) => {
   }
 
   const { body, username } = req.body;
+
+  if (!body || !username) {
+    return next({ msg: 'Bad request' });
+  }
   return addNewComment({ body, author: username, article_id })
     .then(([comment]) => {
       res.status(201).send({ comment });
