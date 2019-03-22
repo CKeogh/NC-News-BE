@@ -164,6 +164,11 @@ describe('/api', () => {
         .then(({ body }) => {
           expect(body.msg).to.equal('no article to delete');
         }));
+      it('ERROR: should return 400 code if given incorrect article_id format', () => request.get('/api/articles/banana')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('Bad request');
+        }));
 
       describe('/comments', () => {
         it('GET: returns status code 200 and comments array for article_id', () => request.get('/api/articles/1/comments')
@@ -259,7 +264,7 @@ describe('/api', () => {
     });
   });
 
-  describe.only('/users/:username', () => {
+  describe('/users/:username', () => {
     it('GET: should return a single user from given username', () => request.get('/api/users/rogersop')
       .expect(200)
       .then(({ body }) => {

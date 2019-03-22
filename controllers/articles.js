@@ -27,7 +27,8 @@ exports.receiveArticle = (req, res, next) => {
 
 exports.sendArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  getArticleById(article_id)
+  if (Number.isNaN(+article_id)) return next({ msg: 'Bad request' });
+  return getArticleById(article_id)
     .then(([article]) => {
       if (!article) next({ msg: 'article does not exist' });
       res.status(200).send({ article });
