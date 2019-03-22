@@ -19,8 +19,8 @@ exports.sendUserByUsername = (req, res, next) => {
   const { username } = req.params;
   getUserByUsername(username)
     .then(([user]) => {
-      if (user.length === 0) next({ msg: 'username does not exist' });
-      res.status(200).send({ user });
+      if (user.length === 0) return next({ msg: 'username does not exist' });
+      return res.status(200).send({ user });
     })
     .catch(next);
 };
