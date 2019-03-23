@@ -20,7 +20,8 @@ describe('/api', () => {
   describe('/topics', () => {
     it('GET: return status code 200 and array of topics', () => request.get('/api/topics').expect(200)
       .then(({ body }) => {
-        expect(body.topics[0]).to.have.keys('slug', 'description');
+        expect(body.topics[0]).to.have.keys('slug', 'description', 'article_count');
+        expect(body.topics[0].article_count).to.equal('11');
       }));
     it('POST: add topic and return status code 201', () => {
       const reqBody = { slug: 'a', description: 'xxx' };
